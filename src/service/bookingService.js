@@ -1,0 +1,1 @@
+//# tính giá, validate ghế/loại vé
