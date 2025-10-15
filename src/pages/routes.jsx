@@ -59,14 +59,14 @@ export default function AllRoutes() {
 
         {/* CUSTOMER */}
         <Route element={<MainLayout />}>
-          <Route path="home" element={<HomePage />} />
-          <Route path="search" element={<SearchTripPage />} />
-          <Route path="my-bookings" element={<Guard><MyBookingsPage /></Guard>} />
-          <Route path="booking" element={<Guard><BookingPage /></Guard>} />
-          <Route path="payment" element={<Guard><PaymentPage /></Guard>} />
-          <Route path="tracking" element={<Guard><TrackingPage /></Guard>} />
-          <Route path="rating" element={<Guard><RatingPage /></Guard>} />
-          <Route path="trip-detail" element={<SearchTripPage />} />
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/search" element={<SearchTripPage />} />
+          <Route path="/my-bookings" element={<Guard><MyBookingsPage /></Guard>} />
+          <Route path="/booking" element={<Guard><BookingPage /></Guard>} />
+          <Route path="/payment" element={<Guard><PaymentPage /></Guard>} />
+          <Route path="/tracking" element={<Guard><TrackingPage /></Guard>} />
+          <Route path="/rating" element={<Guard><RatingPage /></Guard>} />
+          <Route path="/trip-detail" element={<SearchTripPage />} />
         </Route>
 
         {/* DRIVER */}

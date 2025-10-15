@@ -8,6 +8,8 @@ const upcomingTrips = [
   { id: 101, from: 'Quận 3', to: 'Quận 5', date: '15/10', time: '14:30', seat: 'B1', vehicle: '4 chỗ (carpool)', type: 'nội thành', carpool: true, passengers: 2, maxPassengers: 3, status: 'Đang ghép' },
   { id: 102, from: 'Hà Nội', to: 'Hải Phòng', date: '16/10', time: '07:00', seat: 'A2', vehicle: 'Giường nằm', type: 'liên tỉnh', carpool: false, status: 'Đã thanh toán' },
 ];
+
+
 const trips = [
   { id: 1, from: 'Quận 8', to: 'Quận 1', time: '19:00 15/10', price: 60000, vehicle: 'Carpool 4 chỗ', seats: 1, type: 'nội thành', carpool: true, passengers: 1, maxPassengers: 3, status: 'Đang ghép' },
   { id: 2, from: 'Hà Nội', to: 'Vinh', time: '07:30 16/10', price: 220000, vehicle: 'Xe khách Cabin', seats: 14, type: 'liên tỉnh', carpool: false },

@@ -7,81 +7,92 @@ const navLinks = [
   { to: "/search", text: "Tìm chuyến", icon: "🔍" },
   { to: "/booking", text: "Đặt vé", icon: "🚌" },
   { to: "/my-bookings", text: "Lịch sử vé", icon: "📑" },
+  { to: "/payment", text: "Thanh toán", icon: "💳" },
+  { to: "/tracking", text: "Theo dõi", icon: "📍" },
+  { to: "/rating", text: "Đánh giá", icon: "⭐" },
   { to: "/promotions", text: "Ưu đãi", icon: "🎁" },
 ];
 
 const isLoggedIn = true; // mock logic đã đăng nhập
-
 const MainLayout = () => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
+
   function handleLogout() {
     navigate("/");
   }
+
   return (
-    <div className="bg-green-50 min-h-screen flex">
-      {/* SIDEBAR full height */}
+    <div className="flex min-h-screen">
+      {/* SIDEBAR */}
       <aside
-        className={
-          `bg-green-700 text-white flex flex-col w-64 h-screen z-40 shadow-[4px_0_32px_-8px_rgba(22,101,52,0.15)]
-          fixed md:static top-0 left-0
-          transition-transform duration-300
-          ${open ? 'translate-x-0' : '-translate-x-full'}
-          md:translate-x-0`
-        }
-        style={{ minHeight: '100vh' }}
+        className={`
+          bg-green-700 text-white flex flex-col min-h-screen z-40 shadow-[4px_0_32px_-8px_rgba(22,101,52,0.15)]
+          fixed top-0 left-0
+          transition-all duration-300
+          ${open ? 'w-64' : 'w-16'}
+        `}
       >
-        <div className="flex items-center gap-3 px-6 h-20 font-extrabold text-2xl tracking-tight border-b border-green-800 bg-green-800 select-none">
-          <span className="text-emerald-200 text-2xl"><i className="fa-solid fa-car-side"></i></span>
-          <span className="font-extrabold tracking-widest text-xl">RideBooking</span>
+        {/* Header with Toggle */}
+        <div className="flex items-center justify-between px-4 h-20 font-extrabold text-2xl tracking-tight border-b border-green-800 bg-green-800 select-none">
+          <div className="flex items-center gap-3">
+            <span className="text-emerald-200 text-2xl"><i className="fa-solid fa-car-side"></i></span>
+            {open && <span className="font-extrabold tracking-widest text-xl">RideBooking</span>}
+          </div>
+          <button
+            onClick={() => setOpen(!open)}
+            className="text-white hover:bg-green-700 p-2 rounded-lg transition"
+            aria-label="Toggle sidebar"
+          >
+            <svg width="1.2em" height="1.2em" viewBox="0 0 24 24" fill="none" className="inline">
+              <path d={open ? "M15 19l-7-7 7-7" : "M9 5l7 7-7 7"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
         </div>
-        <nav className="flex flex-col py-6 gap-2 flex-1">
+
+        {/* Navigation */}
+        <nav className="flex flex-col py-6 gap-2 flex-1 overflow-y-auto">
           {navLinks.map((item) => (
             <Link
               key={item.to}
               to={item.to}
-              className={`flex items-center px-7 py-3 font-medium gap-3 rounded-l-none hover:bg-green-600 transition text-base
+              className={`flex items-center px-4 py-3 font-medium gap-3 rounded-r-lg mx-2 hover:bg-green-600 transition text-base
                 ${pathname.startsWith(item.to) ? 'bg-green-900 font-bold shadow-lg' : ''}`}
-              onClick={() => setOpen(false)}
+              title={!open ? item.text : ''}
             >
-              <span className="text-xl">{item.icon}</span>
-              <span className="hidden md:inline">{item.text}</span>
+              <span className="text-xl min-w-[1.5rem] text-center">{item.icon}</span>
+              {open && <span>{item.text}</span>}
             </Link>
           ))}
         </nav>
-        <div className="mt-auto pb-6 px-7">
+
+        {/* Logout/Login Button */}
+        <div className="mt-auto pb-6 px-4">
           {isLoggedIn ? (
             <button
               onClick={handleLogout}
-              className="block w-full py-3 text-center font-bold rounded-lg bg-white text-green-700 hover:bg-green-100 transition"
-            >Đăng xuất</button>
+              className={`flex items-center justify-center w-full py-3 text-center font-bold rounded-lg bg-white text-green-700 hover:bg-green-100 transition ${!open && 'px-2'}`}
+              title={!open ? 'Đăng xuất' : ''}
+            >
+              {open ? 'Đăng xuất' : '🚪'}
+            </button>
           ) : (
             <Link
               to="/login"
-              className="block w-full py-3 text-center font-bold rounded-lg bg-white text-green-700 hover:bg-green-100 transition"
-              onClick={()=>setOpen(false)}
-            >Đăng nhập</Link>
+              className={`flex items-center justify-center w-full py-3 text-center font-bold rounded-lg bg-white text-green-700 hover:bg-green-100 transition ${!open && 'px-2'}`}
+              title={!open ? 'Đăng nhập' : ''}
+            >
+              {open ? 'Đăng nhập' : '🔑'}
+            </Link>
           )}
         </div>
       </aside>
 
-      {/* Overlay mobile (bấm ngoài là đóng sidebar) */}
-      {open && (
-        <div className="fixed inset-0 z-30 bg-black/30 md:hidden" onClick={() => setOpen(false)} />
-      )}
-      {/* Hamburger button mobile */}
-      <button
-        className="fixed md:hidden z-50 top-4 left-4 bg-green-700 text-white p-3 rounded-full shadow-lg hover:bg-green-800 transition"
-        style={{ pointerEvents: open ? 'none' : 'auto' }}
-        aria-label="Mở menu"
-        onClick={() => setOpen(true)}
-      >
-        <svg width="1.5em" height="1.5em" viewBox="0 0 24 24" fill="none" className="inline"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
-      </button>
-
       {/* Content */}
-      <div className="flex-1 min-h-screen flex flex-col md:ml-64">
+      <div 
+        className={`flex-1 flex flex-col transition-all duration-300 ${open ? 'ml-64' : 'ml-16'}`}
+      >
         <div className="w-full max-w-5xl mx-auto py-6 px-2 md:px-8 flex-1">
           <Outlet />
         </div>

@@ -50,25 +50,25 @@ const LoginPage = () => {
         <form className="flex flex-col gap-4">
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">Email</label>
-            <input
-              type="email"
+          <input
+            type="email"
               placeholder="example@email.com"
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
-              value={email}
+            value={email}
               onChange={e => setEmail(e.target.value)}
-            />
-          </div>
+          />
+        </div>
           
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">Mật khẩu</label>
-            <input
-              type="password"
+          <input
+            type="password"
               placeholder="••••••••"
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
-              value={password}
+            value={password}
               onChange={e => setPassword(e.target.value)}
-            />
-          </div>
+          />
+        </div>
 
           <button 
             type="button" 
@@ -113,7 +113,7 @@ const LoginPage = () => {
             <Link to="/privacy" className="text-green-600 hover:underline">Chính sách bảo mật</Link>
           </p>
         </div>
-      </div>
+        </div>
     </div>
   );
 };
