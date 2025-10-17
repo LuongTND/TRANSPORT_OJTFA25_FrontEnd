@@ -1,102 +1,294 @@
 import React, { useState } from "react";
 
-const trips = [
-  // Liên tỉnh
-  { id: 1, type: "liên tỉnh", route: "Hà Nội - Đà Nẵng", time: "2025-10-15 08:00", vehicle: "51A-123.45", carType: "Giường nằm", seats: 44, booked: 41, driver: "Nguyễn Văn T", status: "Chưa chạy" },
-  // Nội thành ghép xe
-  { id: 2, type: "nội thành", route: "Q1 - Q7", time: "2025-10-16 15:30", vehicle: "30A-356.86", carType: "Ô tô", seats: 4, booked: 2, driver: "Nguyễn Văn D", status: "Đang ghép", passengers: [
-    { name: "Khách 1", phone: "012345" },
-    { name: "Khách 2", phone: "098765" },
-  ]},
-  { id: 3, type: "liên tỉnh", route: "Huế - Sài Gòn", time: "2025-10-16 17:00", vehicle: "73B-456.78", carType: "Giường nằm", seats: 44, booked: 44, driver: "Phạm Văn B", status: "Đang chạy" },
-  { id: 4, type: "nội thành", route: "Hoàn Kiếm - Cầu Giấy", time: "2025-10-20 09:00", vehicle: "30H-555.11", carType: "Ô tô", seats: 5, booked: 5, driver: "Lê Thị V", status: "Hoàn thành", passengers: [
-    { name: "Trần Văn E", phone: "065432" },
-    { name: "Phạm Hà Q", phone: "098111" },
-    { name: "Bùi M Y", phone: "093543" },
-    { name: "Vũ Văn Đ", phone: "033543" },
-    { name: "Ngô T T", phone: "080545" },
-  ]}
+const mockBookings = [
+  // Tuyến 1: Thanh Khê → Hải Châu (4 chỗ - Ghép chuyến)
+  { id: "B001", user: "Nguyễn Văn A", phone: "0912345678", from: "Thanh Khê", to: "Hải Châu", time: "2025-10-15 08:00", carType: "4 chỗ", bookingType: "ghép", status: "Chờ ghép", price: 50000, driver: "Trần Văn D", vehicle: "43A-123.45" },
+  { id: "B002", user: "Phạm Thị B", phone: "0987654321", from: "Thanh Khê", to: "Hải Châu", time: "2025-10-15 08:05", carType: "4 chỗ", bookingType: "ghép", status: "Chờ ghép", price: 50000, driver: "Trần Văn D", vehicle: "43A-123.45" },
+  { id: "B003", user: "Trần Minh C", phone: "0911223344", from: "Thanh Khê", to: "Hải Châu", time: "2025-10-15 08:10", carType: "4 chỗ", bookingType: "ghép", status: "Đang chạy", price: 50000, driver: "Trần Văn D", vehicle: "43A-123.45" },
+  { id: "B004", user: "Lê Hoàng D", phone: "0933445566", from: "Thanh Khê", to: "Hải Châu", time: "2025-10-15 08:35", carType: "4 chỗ", bookingType: "ghép", status: "Đang chạy", price: 50000, driver: "Trần Văn D", vehicle: "43A-123.45" },
+
+  // Tuyến 2: Sơn Trà → Hải Châu (7 chỗ - Ghép chuyến)
+  { id: "B005", user: "Phan Thị E", phone: "0977555333", from: "Sơn Trà", to: "Hải Châu", time: "2025-10-15 10:00", carType: "7 chỗ", bookingType: "ghép", status: "Đang chạy", price: 70000, driver: "Lý Thị F", vehicle: "43B-234.56" },
+
+  // Tuyến 3: Sơn Trà → Thanh Khê (4 chỗ - Ghép chuyến)
+  { id: "B006", user: "Đặng Văn F", phone: "0922334455", from: "Sơn Trà", to: "Thanh Khê", time: "2025-10-16 14:00", carType: "4 chỗ", bookingType: "ghép", status: "Chờ ghép", price: 45000, driver: "Nguyễn Văn K", vehicle: "43C-456.78" },
+  { id: "B007", user: "Ngô Quỳnh G", phone: "0966778899", from: "Sơn Trà", to: "Thanh Khê", time: "2025-10-16 14:05", carType: "4 chỗ", bookingType: "ghép", status: "Chờ ghép", price: 45000, driver: "Nguyễn Văn K", vehicle: "43C-456.78" },
+  { id: "B008", user: "Hồ Anh H", phone: "0944556677", from: "Sơn Trà", to: "Thanh Khê", time: "2025-10-16 14:10", carType: "4 chỗ", bookingType: "ghép", status: "Đang chạy", price: 45000, driver: "Nguyễn Văn K", vehicle: "43C-456.78" },
+
+  // Tuyến 4: Cẩm Lệ → Sơn Trà (4 chỗ - Nguyên chuyến 1 mình)
+  { id: "B009", user: "Bùi Văn K", phone: "0765432109", from: "Cẩm Lệ", to: "Sơn Trà", time: "2025-10-17 16:00", carType: "4 chỗ", bookingType: "nguyên", status: "Chưa chạy", price: 60000, driver: "Phạm Văn L", vehicle: "43D-555.11" },
+
+  // Tuyến 5: Liên Chiểu → Hải Châu (7 chỗ - Nguyên chuyến)
+  { id: "B010", user: "Vũ Văn M", phone: "0855554444", from: "Liên Chiểu", to: "Hải Châu", time: "2025-10-18 12:43", carType: "7 chỗ", bookingType: "nguyên", status: "Đang chạy", price: 75000, driver: "Võ Thị N", vehicle: "43E-789.22" },
+
+   // Tuyến 6: Ngũ Hành Sơn → Thanh Khê (4 chỗ - Ghép chuyến)
+  { id: "B011", user: "Đinh Hương L", phone: "0877776666", from: "Ngũ Hành Sơn", to: "Thanh Khê", time: "2025-10-19 09:00", carType: "4 chỗ", bookingType: "ghép", status: "Chờ ghép", price: 48000, driver: "Hoàng Văn O", vehicle: "43F-111.99" },
+  { id: "B012", user: "Nguyễn N N", phone: "0888884444", from: "Ngũ Hành Sơn", to: "Thanh Khê", time: "2025-10-19 09:05", carType: "4 chỗ", bookingType: "ghép", status: "Chờ ghép", price: 48000, driver: "Hoàng Văn O", vehicle: "43F-111.99" },
 ];
-const color = s => s === "Hoàn thành" ? "text-green-700" : s === "Đang chạy" ? "text-blue-700" : s === "Đang ghép" ? "text-yellow-700" : 'text-gray-500';
+
+const statusConfig = {
+  "Chưa chạy": { bg: "bg-gray-50", borderColor: "border-l-4 border-gray-400", badge: "badge badge-ghost" },
+  "Chờ ghép": { bg: "bg-yellow-50", borderColor: "border-l-4 border-yellow-400", badge: "badge badge-warning" },
+  "Đang chạy": { bg: "bg-blue-50", borderColor: "border-l-4 border-blue-400", badge: "badge badge-info" },
+  "Đang chạy - Nhận thêm": { bg: "bg-purple-50", borderColor: "border-l-4 border-purple-400", badge: "badge badge-secondary" },
+  "Hoàn thành": { bg: "bg-green-50", borderColor: "border-l-4 border-green-400", badge: "badge badge-success" }
+};
 
 const TripsPage = () => {
-  const [st, setSt] = useState("");
-  const [show, setShow] = useState(null);
-  const filtered = st ? trips.filter(t => t.status === st) : trips;
+  const [selectedStatus, setSelectedStatus] = useState("");
+  const [expandedTrip, setExpandedTrip] = useState(null);
+
+  // Group bookings by route + time window (15 min) = 1 trip (chỉ cho ghép chuyến)
+  const groupedTrips = mockBookings.reduce((acc, booking) => {
+    // Nguyên chuyến: tạo trip riêng cho mỗi booking
+    if (booking.bookingType === "nguyên") {
+      const tripKey = `nguyên|${booking.id}`;
+      acc[tripKey] = {
+        key: tripKey,
+        from: booking.from,
+        to: booking.to,
+        date: booking.time.split(" ")[0],
+        hour: booking.time.split(" ")[1].split(":")[0],
+        carType: booking.carType,
+        maxSeats: parseInt(booking.carType),
+        bookings: [booking],
+        tripStatus: booking.status,
+        bookingType: "nguyên"
+      };
+    } else {
+      // Ghép chuyến: group theo tuyến + giờ
+      const hourKey = booking.time.split(" ")[1].split(":")[0];
+      const tripKey = `ghép|${booking.from}→${booking.to}|${hourKey}`;
+
+      if (!acc[tripKey]) {
+        acc[tripKey] = {
+          key: tripKey,
+          from: booking.from,
+          to: booking.to,
+          date: booking.time.split(" ")[0],
+          hour: hourKey,
+          carType: booking.carType,
+          maxSeats: parseInt(booking.carType),
+          bookings: [],
+          tripStatus: booking.status,
+          bookingType: "ghép"
+        };
+      }
+      acc[tripKey].bookings.push(booking);
+      
+      // Update trip status logic
+      if (booking.status === "Đang chạy") {
+        const currentBookings = acc[tripKey].bookings.length;
+        if (currentBookings < parseInt(acc[tripKey].carType)) {
+          acc[tripKey].tripStatus = "Đang chạy - Nhận thêm";
+        } else {
+          acc[tripKey].tripStatus = "Đang chạy";
+        }
+      } else if (booking.status === "Hoàn thành" && acc[tripKey].tripStatus !== "Đang chạy" && acc[tripKey].tripStatus !== "Đang chạy - Nhận thêm") {
+        acc[tripKey].tripStatus = "Hoàn thành";
+      }
+    }
+    return acc;
+  }, {});
+
+  const filtered = Object.values(groupedTrips).filter(trip => {
+    return !selectedStatus || trip.tripStatus === selectedStatus;
+  });
+
+  const stats = {
+    total: filtered.length,
+    notStarted: filtered.filter(t => t.tripStatus === "Chưa chạy").length,
+    waiting: filtered.filter(t => t.tripStatus === "Chờ ghép").length,
+    running: filtered.filter(t => t.tripStatus === "Đang chạy").length,
+    runningExtra: filtered.filter(t => t.tripStatus === "Đang chạy - Nhận thêm").length,
+    completed: filtered.filter(t => t.tripStatus === "Hoàn thành").length,
+  };
+
   return (
-    <div>
-      <h1 className="text-xl font-bold text-green-800 mb-4">Quản lý chuyến xe</h1>
-      <div className="mb-4 flex gap-2 items-center">
-        <select className="input input-bordered" value={st} onChange={e => setSt(e.target.value)}>
-          <option value="">Tất cả trạng thái</option>
-          <option>Chưa chạy</option>
-          <option>Đang chạy</option>
-          <option>Hoàn thành</option>
-          <option>Đang ghép</option>
-        </select>
-        <button className="btn btn-success">Lọc</button>
-      </div>
-      <div className="bg-white rounded shadow">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="bg-green-100 text-green-800">
-              <th className="py-2">Tuyến</th>
-              <th>Loại chuyến</th>
-              <th>Loại xe</th>
-              <th>Thời gian</th>
-              <th>Xe</th>
-              <th>Tài xế</th>
-              <th>Số ghế</th>
-              <th>Số khách đã ghép</th>
-              <th>Trạng thái</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.map(t => (
-              <tr key={t.id} className="border-b last:border-none">
-                <td className="py-2">{t.route}</td>
-                <td>
-                  {t.type === 'nội thành' ? <span className="bg-yellow-100 text-yellow-800 rounded px-2 text-xs">Nội thành (ghép xe)</span>
-                    : <span className="bg-green-100 text-green-800 rounded px-2 text-xs">Liên tỉnh</span>}
-                </td>
-                <td>{t.carType}</td>
-                <td>{t.time}</td>
-                <td>{t.vehicle}</td>
-                <td>{t.driver}</td>
-                <td>{t.seats}</td>
-                <td>{t.booked || (t.passengers ? t.passengers.length : 0)}/{t.seats}</td>
-                <td><span className={color(t.status) + " font-medium"}>{t.status}</span></td>
-                <td>
-                  {t.type === 'nội thành' ? (
-                    <button className="btn btn-xs btn-success mr-2" onClick={() => setShow(t)}>Xem</button>
-                  ) : (
-                    <button className="btn btn-xs btn-success mr-2" disabled>---</button>
-                  )}
-                  <button className="btn btn-xs btn-outline-success mr-2">Sửa</button>
-                  <button className="btn btn-xs btn-outline-error">Xóa</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      {show && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-50">
-          <div className="bg-white rounded-xl shadow-xl max-w-xs w-full p-6 relative">
-            <button className="absolute top-2 right-3 text-xl" onClick={() => setShow(null)}>✕</button>
-            <h3 className="font-bold text-green-800 mb-2 text-center">Danh sách ghép xe</h3>
-            <ul className="mb-2">
-              {show.passengers && show.passengers.length > 0 ? show.passengers.map((p, i) => (
-                <li key={i} className="py-1 border-b last:border-none text-gray-800 flex justify-between"><span>{p.name}</span> <span className="text-sm text-gray-500">{p.phone}</span></li>
-              )) : <li className="text-gray-400 italic">Chưa có khách nào ghép</li>}
-            </ul>
-            <div className="mt-4 flex gap-2">
-              <button className="btn btn-success flex-1" onClick={() => setShow(null)}>Đóng</button>
-            </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 p-8">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-slate-900 mb-2">Quản lý Chuyến Xe</h1>
+          <p className="text-slate-600 text-sm">Theo dõi và quản lý thông tin chuyến xe</p>
+        </div>
+
+        {/* Stats */}
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-3 mb-8">
+          <div className="bg-white rounded-lg shadow-sm p-4 border-t-4 border-blue-500">
+            <p className="text-xs text-slate-600 font-medium mb-1">Tổng</p>
+            <p className="text-2xl font-bold text-slate-900">{stats.total}</p>
+          </div>
+          <div className="bg-white rounded-lg shadow-sm p-4 border-t-4 border-gray-400">
+            <p className="text-xs text-slate-600 font-medium mb-1">Chưa chạy</p>
+            <p className="text-2xl font-bold text-slate-600">{stats.notStarted}</p>
+          </div>
+          <div className="bg-white rounded-lg shadow-sm p-4 border-t-4 border-yellow-500">
+            <p className="text-xs text-slate-600 font-medium mb-1">Chờ ghép</p>
+            <p className="text-2xl font-bold text-yellow-700">{stats.waiting}</p>
+          </div>
+          <div className="bg-white rounded-lg shadow-sm p-4 border-t-4 border-blue-600">
+            <p className="text-xs text-slate-600 font-medium mb-1">Đang chạy</p>
+            <p className="text-2xl font-bold text-blue-700">{stats.running}</p>
+          </div>
+          <div className="bg-white rounded-lg shadow-sm p-4 border-t-4 border-purple-500">
+            <p className="text-xs text-slate-600 font-medium mb-1">Nhận thêm</p>
+            <p className="text-2xl font-bold text-purple-700">{stats.runningExtra}</p>
+          </div>
+          <div className="bg-white rounded-lg shadow-sm p-4 border-t-4 border-green-500">
+            <p className="text-xs text-slate-600 font-medium mb-1">Hoàn thành</p>
+            <p className="text-2xl font-bold text-green-700">{stats.completed}</p>
           </div>
         </div>
-      )}
+
+        {/* Filter */}
+        <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
+          <label className="text-xs font-semibold text-slate-700 mb-3 block">Lọc Trạng Thái Chuyến</label>
+          <div className="flex items-center gap-4">
+            <select 
+              className="select select-bordered select-sm max-w-xs bg-white text-slate-900"
+              value={selectedStatus}
+              onChange={(e) => setSelectedStatus(e.target.value)}
+            >
+              <option value="">Tất cả trạng thái</option>
+              <option>Chưa chạy</option>
+              <option>Chờ ghép</option>
+              <option>Đang chạy</option>
+              <option>Đang chạy - Nhận thêm</option>
+              <option>Hoàn thành</option>
+            </select>
+            <button 
+              onClick={() => setSelectedStatus("")}
+              className="btn btn-sm btn-outline"
+            >
+              Xóa lọc
+            </button>
+            <span className="text-sm text-slate-600 ml-auto">
+              Hiển thị: <span className="font-bold text-blue-600">{filtered.length}</span> chuyến
+            </span>
+          </div>
+        </div>
+
+        {/* Trips List */}
+        <div className="space-y-4">
+          {filtered.map(trip => {
+            const config = statusConfig[trip.tripStatus];
+            const booked = trip.bookings.length;
+            const available = trip.maxSeats - booked;
+            
+            return (
+              <div key={trip.key} className={`bg-white rounded-lg shadow-sm ${config.borderColor}`}>
+                <div className="px-6 py-4">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-2">
+                        <span className="font-bold text-slate-900 text-lg">{trip.from} → {trip.to}</span>
+                        <span className="badge badge-sm badge-outline">{trip.carType}</span>
+                        {trip.bookingType === "nguyên" && <span className="badge badge-sm badge-primary">Nguyên chuyến</span>}
+                        {trip.bookingType === "ghép" && <span className="badge badge-sm badge-info">Ghép chuyến</span>}
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setExpandedTrip(expandedTrip === trip.key ? null : trip.key)}
+                      className="text-blue-600 font-bold text-xl hover:text-blue-800"
+                    >
+                      {expandedTrip === trip.key ? "▼" : "▶"}
+                    </button>
+                  </div>
+
+                  {/* Main Info Grid */}
+                  <div className="grid grid-cols-2 md:grid-cols-6 gap-4 text-sm bg-slate-50 p-4 rounded-lg">
+                    <div>
+                      <p className="text-xs text-slate-500 font-semibold mb-1">Thời gian</p>
+                      <p className="font-semibold text-slate-900">{trip.date} {trip.hour}:00</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-slate-500 font-semibold mb-1">Tài xế</p>
+                      <p className="font-semibold text-slate-900">{trip.bookings[0]?.driver || "-"}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-slate-500 font-semibold mb-1">Biển số xe</p>
+                      <p className="font-semibold text-slate-900">{trip.bookings[0]?.vehicle || "-"}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-slate-500 font-semibold mb-1">Khách / Chỗ</p>
+                      <p className="font-semibold text-slate-900">{booked}/{trip.maxSeats}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-slate-500 font-semibold mb-1">Giá / khách</p>
+                      <p className="font-semibold text-green-600">{(trip.bookings[0]?.price || 0).toLocaleString()}đ</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-slate-500 font-semibold mb-1">Trạng thái</p>
+                      <span className={config.badge}>{trip.tripStatus}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Expanded View */}
+                {expandedTrip === trip.key && (
+                  <div className="border-t px-6 py-4 bg-slate-50">
+                    <h4 className="text-sm font-bold text-slate-900 mb-4">
+                      {trip.bookingType === "nguyên" ? "Khách hàng" : "Danh sách hành khách"} ({trip.bookings.length})
+                    </h4>
+                    <div className="space-y-3">
+                      {trip.bookings.map((booking, idx) => (
+                        <div key={booking.id} className="bg-white p-4 rounded-lg border border-slate-200">
+                          <div className="flex items-start justify-between">
+                            <div>
+                              <p className="font-semibold text-slate-900">{idx + 1}. {booking.user}</p>
+                              <p className="text-xs text-slate-600">📱 {booking.phone}</p>
+                            </div>
+                            <div className="text-right">
+                              <p className="text-xs text-slate-500">Giá vé</p>
+                              <p className="font-bold text-green-600">{booking.price.toLocaleString()}đ</p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Status Messages */}
+                    <div className="mt-4 pt-4 border-t space-y-2">
+                      {trip.bookingType === "nguyên" && (
+                        <div className="p-3 bg-blue-100 text-blue-800 text-xs rounded-lg">
+                          👤 Đặt nguyên chuyến riêng - Không ghép ai
+                        </div>
+                      )}
+                      {trip.bookingType === "ghép" && available > 0 && trip.tripStatus === "Chờ ghép" && (
+                        <div className="p-3 bg-yellow-100 text-yellow-800 text-xs rounded-lg">
+                          ⏳ Còn {available} chỗ trống, chờ thêm khách ghép...
+                        </div>
+                      )}
+                      {trip.bookingType === "ghép" && available > 0 && trip.tripStatus === "Đang chạy - Nhận thêm" && (
+                        <div className="p-3 bg-purple-100 text-purple-800 text-xs rounded-lg">
+                          🚗 Xe đang chạy, còn {available} chỗ - Nhận thêm khách ghép dọc đường
+                        </div>
+                      )}
+                      {available === 0 && trip.tripStatus === "Đang chạy" && (
+                        <div className="p-3 bg-blue-100 text-blue-800 text-xs rounded-lg">
+                          ✓ Chuyến đầy, đang chạy
+                        </div>
+                      )}
+                      {available === 0 && trip.tripStatus === "Chờ ghép" && (
+                        <div className="p-3 bg-green-100 text-green-800 text-xs rounded-lg">
+                          ✓ Chuyến đầy, sẵn sàng khởi hành
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {filtered.length === 0 && (
+          <div className="text-center py-16 bg-white rounded-lg shadow-sm">
+            <p className="text-slate-500 text-lg">Không tìm thấy chuyến nào</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
