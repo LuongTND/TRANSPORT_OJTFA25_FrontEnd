@@ -38,7 +38,7 @@ import SettingsPage from './admin/SettingsPage';
 // Fake auth (mock role/user)
 const fakeAuth = {
   isAuth: true,
-  role: 'customer', // 'driver' | 'admin'
+  role: 'admin', // 'driver' | 'admin'
 };
 
 function Guard({ children, role }) {

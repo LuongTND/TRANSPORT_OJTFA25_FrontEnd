@@ -34,7 +34,6 @@ const DriverLayout = () => {
       <div className="flex-1 max-w-5xl mx-auto w-full px-4 py-6">
         <Outlet />
       </div>
-      <Footer />
     </div>
   );
 };
