@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
-import Footer from '../components/Footer';
+
 
 const nav = [
   { to: '/driver', text: 'Dashboard' },
@@ -34,7 +34,7 @@ const DriverLayout = () => {
       <div className="flex-1 max-w-5xl mx-auto w-full px-4 py-6">
         <Outlet />
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };
