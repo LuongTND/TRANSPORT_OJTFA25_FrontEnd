@@ -2,8 +2,10 @@ import axios from "axios";
 
 const DEFAULT_TIMEOUT_MS = 15000;
 
-const apiBaseUrl =
-  process.env.REACT_APP_API_BASE_URL || "http://localhost:3000/api";
+// Use Vite env variable if provided, fallback to local API
+const apiBaseUrl = (import.meta && import.meta.env && import.meta.env.VITE_API_BASE_URL)
+  ? import.meta.env.VITE_API_BASE_URL
+  : "http://localhost:3000/api";
 
 const axiosClient = axios.create({
   baseURL: apiBaseUrl,

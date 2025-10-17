@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { authService } from '../../api/authService';
 
 const RegisterPage = () => {
   const [fullname, setFullname] = useState("");
@@ -9,6 +10,60 @@ const RegisterPage = () => {
   const [confirm, setConfirm] = useState("");
   const [role, setRole] = useState("customer");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    setError("");
+    
+    // Validate frontend
+    if (!fullname || !email || !phone || !password || !confirm) {
+      setError("Vui lòng nhập đầy đủ tất cả các trường");
+      return;
+    }
+    
+    if (password !== confirm) {
+      setError("Mật khẩu xác nhận không khớp");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await authService.register({ 
+        fullname, 
+        email, 
+        phone, 
+        password, 
+        role 
+      });
+      
+      const { token, user } = response.data || response;
+
+      if (token && user) {
+        // Lưu token và user info vào localStorage
+        localStorage.setItem('token', token);
+        localStorage.setItem('authUser', JSON.stringify(user));
+
+        // Redirect theo role
+        if (user.role === 'admin') {
+          navigate('/admin');
+        } else if (user.role === 'driver') {
+          navigate('/driver');
+        } else {
+          navigate('/');
+        }
+      } else {
+        setError('Đăng ký thất bại. Vui lòng thử lại.');
+      }
+    } catch (err) {
+      console.error('Register error:', err);
+      setError(err?.response?.data?.message || 'Đăng ký thất bại. Email có thể đã tồn tại.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-white p-4">
@@ -50,7 +105,7 @@ const RegisterPage = () => {
           </div>
         </div>
 
-        <form className="flex flex-col gap-4">
+        <form className="flex flex-col gap-4" onSubmit={handleRegister}>
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">Họ tên</label>
             <input
@@ -59,6 +114,7 @@ const RegisterPage = () => {
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
               value={fullname}
               onChange={e => setFullname(e.target.value)}
+              required
             />
           </div>
 
@@ -70,6 +126,7 @@ const RegisterPage = () => {
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
               value={email}
               onChange={e => setEmail(e.target.value)}
+              required
             />
           </div>
 
@@ -81,6 +138,7 @@ const RegisterPage = () => {
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
               value={phone}
               onChange={e => setPhone(e.target.value)}
+              required
             />
           </div>
 
@@ -92,6 +150,7 @@ const RegisterPage = () => {
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
               value={password}
               onChange={e => setPassword(e.target.value)}
+              required
             />
           </div>
 
@@ -103,14 +162,16 @@ const RegisterPage = () => {
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
               value={confirm}
               onChange={e => setConfirm(e.target.value)}
+              required
             />
           </div>
 
           <button 
-            type="button" 
-            className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg mt-2 transition-all duration-200 shadow-md hover:shadow-lg"
+            type="submit" 
+            disabled={loading}
+            className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg mt-2 transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Đăng ký
+            {loading ? 'Đang đăng ký...' : 'Đăng ký'}
           </button>
         </form>
 

@@ -1,11 +1,47 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { authService } from '../../api/authService';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('customer');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    try {
+      const response = await authService.login({ email, password, role });
+      const { token, user } = response.data || response;
+
+      if (token && user) {
+        // Lưu token và user info vào localStorage
+        localStorage.setItem('token', token);
+        localStorage.setItem('authUser', JSON.stringify(user));
+
+        // Redirect theo role
+        if (user.role === 'admin') {
+          navigate('/admin');
+        } else if (user.role === 'driver') {
+          navigate('/driver');
+        } else {
+          navigate('/');
+        }
+      } else {
+        setError('Đăng nhập thất bại. Vui lòng thử lại.');
+      }
+    } catch (err) {
+      console.error('Login error:', err);
+      setError(err?.response?.data?.message || 'Email hoặc mật khẩu không đúng');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-white p-4">
@@ -47,7 +83,7 @@ const LoginPage = () => {
           </div>
         </div>
 
-        <form className="flex flex-col gap-4">
+        <form className="flex flex-col gap-4" onSubmit={handleLogin}>
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">Email</label>
           <input
@@ -56,6 +92,7 @@ const LoginPage = () => {
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
             value={email}
               onChange={e => setEmail(e.target.value)}
+              required
           />
         </div>
           
@@ -67,14 +104,16 @@ const LoginPage = () => {
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
             value={password}
               onChange={e => setPassword(e.target.value)}
+              required
           />
         </div>
 
           <button 
-            type="button" 
-            className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg mt-2 transition-all duration-200 shadow-md hover:shadow-lg"
+            type="submit" 
+            disabled={loading}
+            className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg mt-2 transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Đăng nhập
+            {loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
           </button>
         </form>
 
