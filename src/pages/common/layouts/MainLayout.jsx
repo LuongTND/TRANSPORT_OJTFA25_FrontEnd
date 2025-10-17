@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
-import Footer from "../components/Footer";
+
 
 const navLinks = [
   { to: "/home", text: "Trang chủ", icon: "🏠" },
@@ -96,7 +96,7 @@ const MainLayout = () => {
         <div className="w-full max-w-5xl mx-auto py-6 px-2 md:px-8 flex-1">
           <Outlet />
         </div>
-        <Footer />
+        
       </div>
     </div>
   );

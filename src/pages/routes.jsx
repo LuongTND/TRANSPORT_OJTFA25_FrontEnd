@@ -81,6 +81,7 @@ export default function AllRoutes() {
         {/* ADMIN */}
         <Route path="/admin" element={<Guard role='admin'><AdminLayout /></Guard>}>
           <Route index element={<AdminDashboard />} />
+          <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="users" element={<UsersPage />} />
           <Route path="bookings" element={<BookingsPage />} />
           <Route path="routes" element={<RoutesPage />} />
