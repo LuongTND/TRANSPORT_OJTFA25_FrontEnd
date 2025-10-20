@@ -20,6 +20,13 @@ const tripApi = {
     return response;
   },
 
+  // Lấy danh sách ghế từ API /tripseats (yêu cầu đề)
+  // Theo database schema: TripSeats table với TripID, SeatNo, IsBooked
+  getTripSeats: async (tripId) => {
+    const response = await axiosClient.get('/tripseats', { params: { TripID: tripId } });
+    return response;
+  },
+
   // Tạo chuyến đi mới (cho tài xế/admin)
   createTrip: async (payload) => {
     // payload: { routeId, vehicleId, driverId, startTime, endTime }
