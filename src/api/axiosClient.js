@@ -3,7 +3,7 @@ import axios from "axios";
 const DEFAULT_TIMEOUT_MS = 15000;
 
 const apiBaseUrl =
-  process.env.REACT_APP_API_BASE_URL || "http://localhost:3000/api";
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:3000/api";
 
 const axiosClient = axios.create({
   baseURL: apiBaseUrl,
