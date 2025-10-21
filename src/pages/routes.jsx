@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { getAuthToken, getUserInfo } from '../utils/mockAuth';
 import LandingPage from './common/LandingPage';
 import LoginPage from './auth/LoginPage';
 import RegisterPage from './auth/RegisterPage';
@@ -35,15 +36,19 @@ import PromotionsPage from './admin/PromotionsPage';
 import ReportsPage from './admin/ReportsPage';
 import SettingsPage from './admin/SettingsPage';
 
-// Fake auth (mock role/user)
-const fakeAuth = {
-  isAuth: true,
-  role: 'customer', // 'driver' | 'admin'
-};
-
+// Real auth check using localStorage
 function Guard({ children, role }) {
-  if (!fakeAuth.isAuth) return <Navigate to="/login" />;
-  if (role && fakeAuth.role !== role) return <Navigate to="/" />;
+  const token = getAuthToken();
+  const userInfo = getUserInfo();
+  
+    if (!token || !userInfo) {
+      return <Navigate to="/login" />;
+    }
+  
+  if (role && userInfo.role !== role) {
+    return <Navigate to="/" />;
+  }
+  
   return children;
 }
 export default function AllRoutes() {

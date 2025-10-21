@@ -5,6 +5,8 @@ const MOCK_USERS = [
       username: 'admin',
       password: '123456',
       fullName: 'Quản trị viên',
+      email: 'admin@ridebooking.com',
+      phone: '0901234567',
       role: 'admin',
       avatar: '/logo.svg'
    },
@@ -12,7 +14,9 @@ const MOCK_USERS = [
       id: 2,
       username: 'user',
       password: '123456',
-      fullName: 'Người dùng',
+      fullName: 'Nguyễn Văn A',
+      email: 'user@example.com',
+      phone: '0987654321',
       role: 'user',
       avatar: '/logo.svg'
    },
@@ -21,6 +25,8 @@ const MOCK_USERS = [
       username: 'staff',
       password: '123456',
       fullName: 'Nhân viên',
+      email: 'staff@ridebooking.com',
+      phone: '0912345678',
       role: 'staff',
       avatar: '/logo.svg'
    }

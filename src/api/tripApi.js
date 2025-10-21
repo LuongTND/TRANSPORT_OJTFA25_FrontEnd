@@ -1,4 +1,5 @@
 import axiosClient from './axiosClient';
+import { getMockTripSeats } from './mockTripSeats';
 
 const tripApi = {
   // Tìm kiếm chuyến đi (cho khách hàng)
@@ -23,8 +24,14 @@ const tripApi = {
   // Lấy danh sách ghế từ API /tripseats (yêu cầu đề)
   // Theo database schema: TripSeats table với TripID, SeatNo, IsBooked
   getTripSeats: async (tripId) => {
-    const response = await axiosClient.get('/tripseats', { params: { TripID: tripId } });
-    return response;
+     try {
+      const response = await axiosClient.get('/tripseats', { params: { TripID: tripId } });
+      return response;
+    } catch (error) {
+      // Fallback to mock data if API fails
+      console.log('API failed, using mock data for tripId:', tripId);
+      return await getMockTripSeats(tripId);
+    }
   },
 
   // Tạo chuyến đi mới (cho tài xế/admin)

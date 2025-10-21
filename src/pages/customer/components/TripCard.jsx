@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const TripCard = ({ trip }) => (
   <div className="bg-white rounded-xl shadow-lg p-5 flex flex-col gap-2 border-l-8 border-green-500">
@@ -19,11 +20,18 @@ const TripCard = ({ trip }) => (
       {!trip.carpool && trip.type==='nội thành' && (
         <span className="bg-gray-100 text-gray-600 px-2 py-0.5 rounded text-xs ml-1">Chuyến riêng</span>
       )}
-      <span className="text-gray-400 text-xs">Còn {trip.seats} ghế</span>
+      <span className="text-gray-400 text-xs">
+        {trip.seatCapacity >= 30 ? `Còn ${trip.seats} ghế` : `Còn ${trip.seats} chỗ`}
+      </span>
     </div>
     <div className="flex justify-between items-center">
       <span className="text-xl font-extrabold text-green-700">{trip.price.toLocaleString()}đ</span>
-      <a href="/booking" className="btn btn-success px-4 py-2 rounded font-semibold">Đặt vé</a>
+      <Link 
+        to={`/booking?tripId=${trip.id}`} 
+        className="btn btn-success px-4 py-2 rounded font-semibold hover:bg-green-700 transition-colors"
+      >
+        Đặt vé
+      </Link>
     </div>
   </div>
 );

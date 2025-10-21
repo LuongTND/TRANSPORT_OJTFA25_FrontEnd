@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import SearchBox from './components/SearchBox';
 import TripCard from './components/TripCard';
+import { mockTripsArray } from '../../data/mockTrips';
 
 const customerName = 'Nguyễn Văn A';
 const upcomingTrips = [
@@ -9,18 +10,15 @@ const upcomingTrips = [
   { id: 102, from: 'Sơn Trà', to: 'Liên Chiểu', date: '21/10', time: '09:00', seat: 'A2', vehicle: '7 chỗ', type: 'nội thành', carpool: true, passengers: 3, maxPassengers: 7, status: 'Đã thanh toán' },
 ];
 
-const trips = [
-  { id: 1, from: 'Cẩm Lệ', to: 'Thanh Khê', time: '19:00 20/10', price: 45000, vehicle: 'Carpool 4 chỗ', seats: 1, type: 'nội thành', carpool: true, passengers: 1, maxPassengers: 3, status: 'Đang ghép' },
-  { id: 2, from: 'Hải Châu', to: 'Ngũ Hành Sơn', time: '07:30 21/10', price: 50000, vehicle: 'Carpool 7 chỗ', seats: 2, type: 'nội thành', carpool: true, passengers: 2, maxPassengers: 7, status: 'Đang ghép' },
-  { id: 3, from: 'Sơn Trà', to: 'Hải Châu', time: '17:00 20/10', price: 55000, vehicle: 'Carpool 4 chỗ', seats: 0, type: 'nội thành', carpool: true, passengers: 4, maxPassengers: 4, status: 'Đã đủ ghép' },
-];
+// Chỉ hiển thị các tuyến nội thành (id 1-8)
+const trips = mockTripsArray.filter(trip => trip.id <= 8);
 
 const HomePage = () => (
   <div className="max-w-6xl mx-auto py-8 px-4">
     <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
       <div>
         <h2 className="text-3xl font-bold text-green-700 mb-1">Xin chào, {customerName} 👋</h2>
-        <p className="text-gray-600">Chúc bạn một ngày vui vẻ và di chuyển an toàn cùng RideBooking!</p>
+        <p className="text-gray-600">Di chuyển nội thành Đà Nẵng an toàn và tiết kiệm cùng RideBooking!</p>
       </div>
       <div className="flex gap-3">
         <Link to="/booking" className="bg-green-600 hover:bg-green-700 text-white px-5 py-2.5 rounded-lg font-semibold shadow transition-colors">Đặt vé mới</Link>
@@ -88,9 +86,55 @@ const HomePage = () => (
     </section>
 
     <section className="mb-14">
-      <h3 className="text-2xl font-bold text-gray-900 mb-4">Gợi ý chuyến hot</h3>
+      <h3 className="text-2xl font-bold text-gray-900 mb-4">Các tuyến nội thành Đà Nẵng</h3>
       <div className="grid md:grid-cols-3 gap-6">
         {trips.map(t => <TripCard key={t.id} trip={t} />)}
+      </div>
+    </section>
+
+    {/* Section cho xe lớn - test chọn ghế */}
+    <section className="mb-14">
+      <h3 className="text-2xl font-bold text-gray-900 mb-4">Tuyến liên tỉnh - Xe lớn (Test chọn ghế)</h3>
+      <div className="grid md:grid-cols-2 gap-6">
+        <div className="bg-white rounded-xl shadow-lg p-5 flex flex-col gap-2 border-l-8 border-blue-500">
+          <div className="flex justify-between items-start">
+            <div>
+              <h4 className="font-bold text-gray-900">Đà Nẵng → Huế</h4>
+              <p className="text-gray-600 text-sm">08:00 - 22/10/2024</p>
+              <p className="text-gray-500 text-xs">Xe khách 45 chỗ • 2 giờ 30 phút</p>
+            </div>
+            <span className="text-gray-400 text-xs">Còn 15 ghế</span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-xl font-extrabold text-blue-700">120.000đ</span>
+            <Link 
+              to="/booking?tripId=9" 
+              className="btn btn-primary px-4 py-2 rounded font-semibold hover:bg-blue-700 transition-colors bg-blue-600 text-white"
+            >
+              Đặt vé
+            </Link>
+          </div>
+        </div>
+        
+        <div className="bg-white rounded-xl shadow-lg p-5 flex flex-col gap-2 border-l-8 border-purple-500">
+          <div className="flex justify-between items-start">
+            <div>
+              <h4 className="font-bold text-gray-900">Đà Nẵng → Hội An</h4>
+              <p className="text-gray-600 text-sm">09:30 - 22/10/2024</p>
+              <p className="text-gray-500 text-xs">Xe khách 30 chỗ • 1 giờ 15 phút</p>
+            </div>
+            <span className="text-gray-400 text-xs">Còn 8 ghế</span>
+          </div>
+          <div className="flex justify-between items-center">
+            <span className="text-xl font-extrabold text-purple-700">80.000đ</span>
+            <Link 
+              to="/booking?tripId=10" 
+              className="btn btn-primary px-4 py-2 rounded font-semibold hover:bg-purple-700 transition-colors bg-purple-600 text-white"
+            >
+              Đặt vé
+            </Link>
+          </div>
+        </div>
       </div>
     </section>
 

@@ -1,15 +1,9 @@
 import React, { useState } from 'react';
 import TripCard from './components/TripCard';
 import SearchBox from './components/SearchBox';
+import { mockTripsArray } from '../../data/mockTrips';
 
-const DATA = [
-  { id: 1, from: 'Thanh Khê', to: 'Hải Châu', time: '07:00 20/10', price: 45000, vehicle: '4 chỗ', seats: 2, type: 'nội thành', carpool: true, passengers: 2, maxPassengers: 4, status: 'Đang ghép' },
-  { id: 2, from: 'Thanh Khê', to: 'Hải Châu', time: '20:00 20/10', price: 50000, vehicle: '7 chỗ', seats: 3, type: 'nội thành', carpool: true, passengers: 4, maxPassengers: 7, status: 'Đang ghép' },
-  { id: 3, from: 'Sơn Trà', to: 'Liên Chiểu', time: '08:30 21/10', price: 40000, vehicle: '4 chỗ', seats: 1, type: 'nội thành', carpool: true, passengers: 3, maxPassengers: 4, status: 'Đã đủ ghép' },
-  { id: 4, from: 'Cẩm Lệ', to: 'Thanh Khê', time: '14:00 21/10', price: 35000, vehicle: '4 chỗ', seats: 2, type: 'nội thành', carpool: true, passengers: 1, maxPassengers: 4, status: 'Đang ghép' },
-  { id: 5, from: 'Hoàn Kiếm', to: 'Cầu Giấy', time: '10:30 20/10', price: 48000, vehicle: '7 chỗ', seats: 1, type: 'nội thành', carpool: true, passengers: 5, maxPassengers: 7, status: 'Đang ghép' },
-  { id: 6, from: 'Thanh Xuân', to: 'Hải Châu', time: '15:45 21/10', price: 55000, vehicle: '4 chỗ', seats: 0, type: 'nội thành', carpool: true, passengers: 4, maxPassengers: 4, status: 'Đã đủ ghép' },
-];
+const DATA = mockTripsArray;
 
 const SearchTripPage = () => {
   const [from, setFrom] = useState('');
