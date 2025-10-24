@@ -1,29 +1,74 @@
 import axiosClient from './axiosClient';
 
+const BOOKING_ENDPOINTS = {
+  GET_MY_BOOKINGS: '/api/bookings/my',
+  GET_BOOKING_DETAIL: '/api/bookings/:id',
+  CANCEL_BOOKING: '/api/bookings/:id/cancel',
+  CREATE_BOOKING: '/api/bookings',
+  UPDATE_BOOKING: '/api/bookings/:id'
+};
+
 const bookingApi = {
-  getBookings: async (params) => {
-    const response = await axiosClient.get('/bookings', { params });
-    return response.data;
+  // Lấy danh sách đặt vé của user hiện tại
+  getMyBookings: async () => {
+    try {
+      const response = await axiosClient.get(BOOKING_ENDPOINTS.GET_MY_BOOKINGS);
+      return response;
+    } catch (error) {
+      console.error('Error getting my bookings:', error);
+      throw error;
+    }
   },
 
-  getBookingById: async (bookingId) => {
-    const response = await axiosClient.get(`/bookings/${bookingId}`);
-    return response.data;
+  // Lấy chi tiết một đặt vé
+  getBookingDetail: async (bookingId) => {
+    try {
+      const response = await axiosClient.get(
+        BOOKING_ENDPOINTS.GET_BOOKING_DETAIL.replace(':id', bookingId)
+      );
+      return response;
+    } catch (error) {
+      console.error('Error getting booking detail:', error);
+      throw error;
+    }
   },
 
-  createBooking: async (payload) => {
-    const response = await axiosClient.post('/bookings', payload);
-    return response.data;
+  // Hủy đặt vé
+  cancelBooking: async (bookingId) => {
+    try {
+      const response = await axiosClient.post(
+        BOOKING_ENDPOINTS.CANCEL_BOOKING.replace(':id', bookingId)
+      );
+      return response;
+    } catch (error) {
+      console.error('Error canceling booking:', error);
+      throw error;
+    }
   },
 
-  updateBooking: async (bookingId, payload) => {
-    const response = await axiosClient.put(`/bookings/${bookingId}`, payload);
-    return response.data;
+  // Tạo đặt vé mới
+  createBooking: async (bookingData) => {
+    try {
+      const response = await axiosClient.post(BOOKING_ENDPOINTS.CREATE_BOOKING, bookingData);
+      return response;
+    } catch (error) {
+      console.error('Error creating booking:', error);
+      throw error;
+    }
   },
 
-  deleteBooking: async (bookingId) => {
-    const response = await axiosClient.delete(`/bookings/${bookingId}`);
-    return response.data;
+  // Cập nhật đặt vé
+  updateBooking: async (bookingId, updateData) => {
+    try {
+      const response = await axiosClient.put(
+        BOOKING_ENDPOINTS.UPDATE_BOOKING.replace(':id', bookingId),
+        updateData
+      );
+      return response;
+    } catch (error) {
+      console.error('Error updating booking:', error);
+      throw error;
+    }
   }
 };
 
