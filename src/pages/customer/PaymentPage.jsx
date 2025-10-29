@@ -49,7 +49,7 @@ const PaymentPage = () => {
   };
 
   const handleGoToHistory = () => {
-    navigate('/customer/bookings');
+    navigate('/my-bookings');
   };
 
   const handleRetryPayment = () => {
@@ -238,7 +238,7 @@ const PaymentPage = () => {
                   Xem chi tiết vé
                 </button>
                 <button 
-                  onClick={() => navigate('/customer/dashboard')}
+                  onClick={() => navigate('/home')}
                   className="w-full py-3 px-6 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-semibold transition-colors"
                 >
                   Về trang chủ
