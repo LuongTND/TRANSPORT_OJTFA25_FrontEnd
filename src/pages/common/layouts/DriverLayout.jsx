@@ -1,5 +1,6 @@
 import React from 'react';
-import { Link, Outlet, useLocation } from 'react-router-dom';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { removeAuthToken } from '../../../utils/mockAuth';
 
 
 const nav = [
@@ -12,6 +13,16 @@ const nav = [
 
 const DriverLayout = () => {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    try {
+      removeAuthToken();
+      localStorage.removeItem('user_info');
+    } finally {
+      navigate('/login');
+    }
+  };
   return (
     <div className="min-h-screen flex flex-col bg-green-50">
       <header className="bg-green-700 text-white flex items-center px-4 py-3 gap-6">
@@ -29,7 +40,7 @@ const DriverLayout = () => {
             >{item.text}</Link>
           ))}
         </nav>
-        <Link to="/login" className="text-green-100 hover:text-white font-semibold ml-auto">Đăng xuất</Link>
+        <button onClick={handleLogout} className="text-green-100 hover:text-white font-semibold ml-auto">Đăng xuất</button>
       </header>
       <div className="flex-1 max-w-5xl mx-auto w-full px-4 py-6">
         <Outlet />

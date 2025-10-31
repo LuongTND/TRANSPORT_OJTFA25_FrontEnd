@@ -20,7 +20,7 @@ const MyVehiclesPage = () => (
               <td>{v.type}</td>
               <td>{v.seat}</td>
               <td><span className={v.status==="Đang hoạt động" ? 'text-green-700' : 'text-yellow-900'}>{v.status}</span></td>
-              <td><button className="btn btn-xs btn-outline-success">Sửa</button></td>
+              <td><button className="btn btn-xs btn-outline-success" onClick={()=>alert('Chức năng sửa xe (placeholder)')}>Sửa</button></td>
             </tr>))}
         </tbody>
       </table>

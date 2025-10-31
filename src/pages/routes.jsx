@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { getAuthToken, getUserInfo } from '../utils/mockAuth';
+import fakeAuth from '../utils/fakeAuth';
 import LandingPage from './common/LandingPage';
 import LoginPage from './auth/LoginPage';
 import RegisterPage from './auth/RegisterPage';
@@ -19,6 +20,7 @@ import TrackingPage from './customer/TrackingPage';
 import RatingPage from './customer/RatingPage';
 import SearchTripPage from './customer/SearchTripPage';
 import TripDetailPage from './customer/TripDetailPage';
+
 // Driver pages
 import DriverDashboard from './driver/DriverDashboard';
 import MyTripsPage from './driver/MyTripsPage';
@@ -40,6 +42,13 @@ import SettingsPage from './admin/SettingsPage';
 function Guard({ children, role }) {
   const token = getAuthToken();
   const userInfo = getUserInfo();
+  // Allow quick role testing via fakeAuth when enabled
+  if (fakeAuth?.isAuth) {
+    if (role && fakeAuth.role !== role) {
+      return <Navigate to="/" />;
+    }
+    return children;
+  }
   
     if (!token || !userInfo) {
       return <Navigate to="/login" />;

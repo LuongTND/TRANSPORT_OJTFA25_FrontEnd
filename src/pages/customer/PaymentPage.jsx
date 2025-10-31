@@ -289,7 +289,7 @@ const PaymentPage = () => {
         <div className="mt-6 text-center">
           <p className="text-sm text-gray-600">
             Cần hỗ trợ? Liên hệ{' '}
-            <a href="tel:1900xxxx" className="text-green-600 hover:text-green-700 font-medium">
+            <a href="tel:0372278710" className="text-green-600 hover:text-green-700 font-medium">
               1900 xxxx
             </a>
             {' '}hoặc{' '}
