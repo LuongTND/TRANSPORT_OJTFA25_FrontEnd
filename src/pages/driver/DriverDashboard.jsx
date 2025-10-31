@@ -19,7 +19,7 @@ const DriverDashboard = () => {
     const load = async () => {
       setLoading(true);
       setError("");
-      const USE_MOCK = true; // render ngay UI với dữ liệu mẫu
+      const USE_MOCK = true;
       try {
         const user = getUserInfo();
         const driverId = user?.id || 1;
@@ -48,7 +48,6 @@ const DriverDashboard = () => {
       }
     };
     load();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (loading) {
@@ -61,11 +60,14 @@ const DriverDashboard = () => {
 
   return (
     <div className="max-w-6xl mx-auto py-8 px-4">
-      {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
         <div>
-          <h2 className="text-3xl font-bold text-green-700 mb-1">Xin chào, Tài xế {driver.name} 👋</h2>
-          <p className="text-gray-600">Xe phụ trách: <span className="font-semibold text-gray-900">{driver.vehicle || 'Đang cập nhật'}</span></p>
+          <h2 className="text-3xl font-bold text-green-700 mb-1">
+            Xin chào, Tài xế {driver.name} 👋
+          </h2>
+          <p className="text-gray-600">
+            Xe phụ trách: <span className="font-semibold text-gray-900">{driver.vehicle || 'Đang cập nhật'}</span>
+          </p>
         </div>
         <div className="flex gap-3">
           <button 
@@ -132,7 +134,7 @@ const DriverDashboard = () => {
                   Xem tất cả
                 </Link>
               </div>
-              {upcoming.length ? (
+              {upcoming.length > 0 ? (
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead className="bg-green-100 text-green-800">
