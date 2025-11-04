@@ -1,7 +1,10 @@
 import React from 'react';
+import RatingDisplay from '../common/components/RatingDisplay';
+
 const trip = {
-  from: 'Hà Nội', to: 'Sài Gòn', time: '07:00 15/10', vehicle: 'Limousine', driver: 'Trần Văn E', seatsLeft: 6, price: 850000
+  from: 'Hà Nội', to: 'Sài Gòn', time: '07:00 15/10', vehicle: 'Limousine', driver: 'Trần Văn E', seatsLeft: 6, price: 850000, rating: 4.5, totalReviews: 12
 };
+
 const TripDetailPage = () => (
   <div className="max-w-2xl mx-auto">
     <h1 className="text-2xl font-bold text-green-800 mb-3">Chi tiết chuyến xe</h1>
@@ -13,7 +16,16 @@ const TripDetailPage = () => (
         </div>
         <div className="flex-1">
           <div>Xe: <span className="bg-green-100 text-green-800 px-2 py-1 rounded text-sm font-semibold">{trip.vehicle}</span></div>
-          <div>Tài xế: <span className="font-semibold">{trip.driver}</span></div>
+          <div className="flex items-center gap-2">
+            <span>Tài xế: <span className="font-semibold">{trip.driver}</span></span>
+            {trip.rating && (
+              <RatingDisplay 
+                rating={trip.rating} 
+                totalReviews={trip.totalReviews}
+                size="sm"
+              />
+            )}
+          </div>
           <div>Còn lại: <span className="text-green-700 font-bold">{trip.seatsLeft}</span> ghế</div>
         </div>
         <div className="text-xl font-extrabold text-green-700">{trip.price.toLocaleString()}đ</div>
@@ -21,5 +33,6 @@ const TripDetailPage = () => (
       <a href="/booking" className="btn btn-success w-full mt-3">Đặt vé ngay</a>
     </div>
   </div>
-)
+);
+
 export default TripDetailPage;

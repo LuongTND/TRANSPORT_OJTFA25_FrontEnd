@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import RatingDisplay from '../common/components/RatingDisplay';
 
 const RatingPage = () => {
   const [star, setStar] = useState(0);
@@ -14,7 +15,9 @@ const RatingPage = () => {
     route: 'Sân bay Đà Nẵng - Mỹ Khê',
     date: '15/10/2025',
     driver: 'Nguyễn Văn A',
-    vehicle: 'Xe 7 chỗ - 51A-12345'
+    vehicle: 'Xe 7 chỗ - 51A-12345',
+    driverRating: 4.5,
+    driverTotalReviews: 23
   };
 
   const starLabels = {
@@ -72,9 +75,18 @@ const RatingPage = () => {
               <span className="text-gray-600">Ngày:</span>
               <span className="font-semibold">{bookingData.date}</span>
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between items-center">
               <span className="text-gray-600">Tài xế:</span>
-              <span className="font-semibold">{bookingData.driver}</span>
+              <div className="flex items-center gap-2">
+                <span className="font-semibold">{bookingData.driver}</span>
+                {bookingData.driverRating && (
+                  <RatingDisplay 
+                    rating={bookingData.driverRating} 
+                    totalReviews={bookingData.driverTotalReviews}
+                    size="sm"
+                  />
+                )}
+              </div>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-600">Phương tiện:</span>
